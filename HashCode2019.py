@@ -7,6 +7,7 @@ liste = [["a_example.txt", "a.out"],
          ["e_shiny_selfies.txt", "e.out"]]
 
 nb = 0
+global_id = 0
 
 def create_all_horizontal_photos(list_photo):
     res = []
@@ -40,7 +41,6 @@ print(N)
 all_photos_horizontal = []
 all_photos_vertical = []
 
-global_id = 0
 for i in range(N):
     try:
         a, b, *x = map(str, file.readline().split(" "))
