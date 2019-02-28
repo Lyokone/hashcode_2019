@@ -10,6 +10,7 @@ nb = 0
 global_id = 0
 
 def create_all_horizontal_photos(list_photo):
+    global global_id
     res = []
     for i in range(len(list_photo)):
         for j in range(i,len(list_photo)):
