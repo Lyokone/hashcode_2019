@@ -6,7 +6,7 @@ liste = [["a_example.txt", "a.out"],
          ["d_pet_pictures.txt", "d.out"],
          ["e_shiny_selfies.txt", "e.out"]]
 
-nb = 0
+nb = 1
 global_id = 0
 
 def create_all_horizontal_photos(list_photo):
@@ -34,6 +34,9 @@ class Photo():
     def __repr__(self):
         return str(self.tags)
 
+
+
+
 file = open(liste[nb][0], 'r')
 
 N = int(str(file.readline()))
@@ -58,4 +61,79 @@ for i in range(N):
 
     global_id += 1
 
-print(create_all_horizontal_photos(all_photos_vertical))
+all_photos_horizontal.extend(create_all_horizontal_photos(all_photos_vertical))
+#print(all_photos_horizontal)
+
+
+def calculate_score(photo1, photo2):
+    total1 = 0
+    for x in photo1.tags:
+        if x in photo2.tags:
+            total1 += 1
+
+    total2 = len(set(photo1.tags) - set(photo2.tags))
+    total3 = len(set(photo2.tags) - set(photo1.tags))
+
+    return min(total1, total2, total3)
+
+
+
+def find_the_best(list_photo):
+    current_photo = list_photo[0]
+
+    score_max = 0
+    photo_max = None
+
+    if len(current_photo.parents) > 0:
+        res = [current_photo.parents]
+    else:
+        res = [[current_photo.id]]
+
+
+    list_photo.remove(current_photo)
+    print("start", current_photo)
+    while len(list_photo) > 0:
+        for photo in list_photo:
+            if photo != current_photo:
+                score = calculate_score(photo, current_photo)
+                if score > score_max:
+                    print("new max", photo)
+                    score_max = score
+                    photo_max = photo
+
+        print(photo_max.id, photo_max.tags, "choosed", "score:", score_max)
+
+
+        for photo in list_photo:
+            if photo != current_photo and photo != photo_max:
+                if photo_max.id in photo.parents:
+                    list_photo.remove(photo)
+
+        #print("current",list_photo, current_photo)
+        list_photo.remove(photo_max)
+        current_photo = photo_max
+
+        if len(current_photo.parents) > 0:
+            res.append(current_photo.parents)
+        else:
+            res.append([current_photo.id])
+
+
+        #print("after", list_photo, current_photo)
+
+        score_max = 0
+        photo_max = None
+
+    return res
+
+
+res = find_the_best(all_photos_horizontal)
+
+ff = open(liste[nb][1], 'w')
+ff.write(str(len(res)) + "\n")
+for x in res:
+    print(x)
+    for y in x:
+        ff.write(str(y) + " ")
+
+    ff.write("\n")
