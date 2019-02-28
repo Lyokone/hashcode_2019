@@ -6,7 +6,7 @@ liste = [["a_example.txt", "a.out"],
          ["d_pet_pictures.txt", "d.out"],
          ["e_shiny_selfies.txt", "e.out"]]
 
-nb = 1
+nb = 2
 global_id = 0
 
 def create_all_horizontal_photos(list_photo):
@@ -92,16 +92,19 @@ def find_the_best(list_photo):
 
     list_photo.remove(current_photo)
     print("start", current_photo)
+
+    start_len = len(list_photo)
     while len(list_photo) > 0:
+        print(str((start_len-len(list_photo))/start_len * 100) + "%")
         for photo in list_photo:
             if photo != current_photo:
                 score = calculate_score(photo, current_photo)
                 if score > score_max:
-                    print("new max", photo)
+                    #print("new max", photo)
                     score_max = score
                     photo_max = photo
 
-        print(photo_max.id, photo_max.tags, "choosed", "score:", score_max)
+        #print(photo_max.id, photo_max.tags, "choosed", "score:", score_max)
 
 
         for photo in list_photo:
